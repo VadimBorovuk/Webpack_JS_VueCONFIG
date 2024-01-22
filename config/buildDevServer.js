@@ -1,12 +1,11 @@
-
-
-export function buildDevServer() {
+function buildDevServer(port) {
     return  {
-        port: 7003,
+        port: port,
         open: true,
         static: './build',
-        /*work only for development*/
         historyApiFallback: true,
         hot: true
     }
 }
+
+module.exports = buildDevServer

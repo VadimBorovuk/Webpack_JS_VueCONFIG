@@ -1,62 +1,18 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-const { VueLoaderPlugin } = require('vue-loader')
+const webpackBuild = require("./config/webpackBuild");
+const path= require("path");
 
 module.exports = (env) => {
-    return {
+
+    return webpackBuild({
         mode: env.mode ?? 'development',
-        entry: './src/index.js',
-        output: {
-            filename: '[name].[contenthash].js',
-            path: path.resolve(__dirname, 'build'),
-            clean: true
+        port: env.port ?? 3007,
+        paths: {
+            html: path.resolve(__dirname, 'public', 'index.html'),
+            favicon: path.resolve(__dirname, 'public', 'favicon.ico'),
+            entry: path.resolve(__dirname, 'src', 'index.js'),
+            output: path.resolve(__dirname, 'build'),
+            public: path.resolve(__dirname, 'public'),
+            src: path.resolve(__dirname, 'src')
         },
-        // devtool: isDev ? 'inline-source-map' : 'source-map',
-        devServer: {
-            port: 3003,
-            open: true,
-            static: './build',
-            /*work only for development*/
-            historyApiFallback: true,
-            hot: true
-        },
-        resolve: {
-            extensions: ['.vue', '.js'],
-            // alias: {
-            //     '@': options.paths.src
-            // },
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.vue$/,
-                    loader: 'vue-loader'
-                },
-                {
-                    test: /\.js$/,
-                    loader: "babel-loader"
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        'vue-style-loader',
-                        'css-loader',
-                    ]
-                }
-            ]
-        },
-        plugins: [
-            new VueLoaderPlugin(),
-            new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, 'public', 'index.html'),
-                favicon: path.resolve(__dirname, 'public', 'favicon.ico')
-            }),
-            new MiniCssExtractPlugin({
-                filename: "css/[name].[contenthash:5].css",
-                chunkFilename: "css/[name].[contenthash:5].css",
-            })
-        ]
-    }
+    })
 };
